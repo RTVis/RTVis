@@ -1,3 +1,3 @@
-python dataprocessing.py
+python3 dataprocessing.py
 
-python app.py
+python3 app.py
