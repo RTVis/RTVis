@@ -1,6 +1,11 @@
 # RTVis: Research Trend Visualization Toolkit
 
 ![RTVis](assets/img/favicon_RTVis.png)
+<p align="center">
+<a href="https://docs.rtvis.design"><img src="https://img.shields.io/badge/Documentation-00599C?style=for-the-badge&logo=Read%20the%20Docs&logoColor=white" /></a>
+</p>
+
+
 <!-- centering -->
 <p align="center">
 <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
