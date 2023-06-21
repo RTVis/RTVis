@@ -1,0 +1,11 @@
+version: '3'
+services:
+  rtvis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8989:8989
+    volumes:
+      - .:/rtvis
+    command: python -u app.py
