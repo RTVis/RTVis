@@ -1,4 +1,12 @@
 # RTVis: Research Trend Visualization Toolkit
+<!-- centering -->
+<p align="center">
+<img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
+<img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/Plotly-239120?style=for-the-badge&logo=plotly&logoColor=white" />
+<img src="https://img.shields.io/badge/Pandas-2C2D72?style=for-the-badge&logo=pandas&logoColor=white" />
+<img src="https://img.shields.io/badge/SciPy-654FF0?style=for-the-badge&logo=SciPy&logoColor=white" />
+</p>
 
 ## Introduction
 
@@ -6,60 +14,43 @@
 
 ### Method 1: Directly run the program (Support Windows, Linux, Mac OS)
 
-1. Download the latest release by
-
+1.  Download the latest release by
 ```bash
 git clone https://github.com/RTVis/RTVis.git
 cd RTVis
 ```
-
-2. Install the dependencies
-
+2.  Install the dependencies
 ```bash
 pip install -r requirements.txt
 ```
-
-3. Preprocess the data
-
+3.  Preprocess the data
 ```bash
 python dataprocessing.py
 ```
-
-4. Run the program
-
+4.  Run the program
 ```bash
 python app.py
 ```
-
-5. Open the browser and visit the website
-
+5.  Open the browser and visit the website
 ```
 http://localhost:8050/
 ```
-
 ### Method 2: Run the program in Docker (Support Windows, Linux, Mac OS)
-
+{:style="counter-reset:step-counter 0"}
 1. Download the latest release by
-
 ```bash
 git clone https://github.com/RTVis/RTVis.git
 cd RTVis
 ```
-
 2. Build the docker image
-
 ```bash
 docker build -t rtvis .
 ```
-
 3. Run the docker image
-
 ```bash
 docker run -p 8050:8050 rtvis
 ```
-
 4. Open the browser and visit the website
-
 ```
 http://localhost:8050/
 ```
@@ -71,8 +62,6 @@ docker run -d -p 8050:8050 rtvis
 ```
 
 Or you can use the `docker-compose.yml` file to run the program in the background
-
 ```bash
 docker-compose up -d
 ```
-
