@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8050
 
 # Run app.py when the container launches
-CMD ["gunicorn", "--workers=1", "--threads=1", "--blind", "0.0.0.0:8050", "app:server"]
+CMD ["gunicorn", "--workers=1", "--threads=1", "-b", "0.0.0.0:8050", "app:server"]

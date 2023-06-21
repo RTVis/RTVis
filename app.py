@@ -431,7 +431,7 @@ app.layout = html.Div(
 def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, state=None):
     if relayoutData is None:
         node_fig = generate_node_fig(None, top_n_node)
-        return node_fig, river_fig, src_doc, generate_bar_chart(None)
+        return node_fig, river_fig, src_doc, generate_bar_chart(None, click_data)
     else:
         if 'xaxis.range[0]' in relayoutData:
             x_range = [relayoutData['xaxis.range[0]'],
@@ -456,4 +456,4 @@ def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, 
 
 # Run the Dash application
 if __name__ == '__main__':
-    app.run_server(host="0.0.0.0", port=8050, debug=True)
+    app.run_server(host="0.0.0.0", port=8050, debug=False)
