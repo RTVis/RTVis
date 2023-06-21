@@ -5,6 +5,7 @@ import networkx as nx
 import pandas as pd
 import dash
 import webbrowser
+from flask import Flask
 
 
 # Read the Excel file into a DataFrame
@@ -311,7 +312,8 @@ bar_fig, _ = generate_bar_chart(5, click_data=None)
 ##############################################################################################################
 # show the figures using dash
 external_stylesheets = ['assets/css/style.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = Flask(__name__)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
 app.title = 'Research Trend Visualization'
 app.favicon = 'assets/favicon.ico'
 app.layout = html.Div(
@@ -454,4 +456,4 @@ def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, 
 
 # Run the Dash application
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(host="0.0.0.0", port=8050, debug=True)

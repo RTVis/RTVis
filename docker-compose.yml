@@ -1,11 +1,19 @@
 version: '3'
 services:
   rtvis:
+    container_name: rtvis
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8989:8989
+      - 8050:8050
     volumes:
       - .:/rtvis
     command: python -u app.py
+    networks:
+      rtvis_net:
+        ipv4_address: 173.26.0.2
+
+networks:
+  rtvis_net:
+    external: true
