@@ -1,0 +1,380 @@
+body {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.47059;
+    font-weight: 400;
+    color: #1d1d1f;
+    background-color: #fff;
+    font-style: normal;
+}
+h4 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+}
+h4 dropdown{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    outline: #000;
+    border-radius: 4px;
+}
+h4 input{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+    padding: 0;
+    width: 40px;
+    height: 34px;
+    outline: #ccc;
+    outline-style: auto;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: rgb(204, 204, 204);
+    border-right-color: rgb(204, 204, 204);
+    border-bottom-color: rgb(204, 204, 204);
+    border-left-color: rgb(204, 204, 204);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+}
+
+#node-x-input input:valid{
+    border: 1px solid #ccc;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-top-color: rgb(204, 204, 204);
+    border-right-color: rgb(204, 204, 204);
+    border-bottom-color: rgb(204, 204, 204);
+    border-left-color: rgb(204, 204, 204);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    outline: #ccc;
+    padding: 0;
+    line-height: 34px;
+}
+.Select{
+    width: 40px;
+}
+.Select-control .Select-input:focus {
+    background: #000 !important;
+    align-items: center !important;
+}
+.Select-menu-outer{
+    background-color: #000;
+}
+.Select-menu-outer div:hover {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.Select-value-label {
+    /* color: #a5b1cd !important; */
+    align-items: center !important;
+}
+.Select--single>.Select-control .Select-value, .Select-placeholder{
+    padding: 0;
+    line-height: 34px;
+    font-size: 20px;
+    text-align: center;
+    align-items: center;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+.graph-container {
+    margin-top: -10px;
+    width: 100%;
+    /* height is 75% of the viewport height */
+    height: 70vh;
+    padding: 0 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    overflow: clip;
+}
+.title{
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-left: 70px;
+    margin-right: 70px;
+}
+.title h1{
+    margin: 0;
+}
+.button-left {
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    background: #0071e3;
+    color: #fff;
+    border-color: rgba(0,0,0,0);
+    border-radius: 980px;
+    font-size: 12px;
+    line-height: 1.33337;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    min-width: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    --sk-button-margin-horizontal: 10px;
+    --sk-button-margin-vertical: 10px;
+    position: absolute;
+    text-decoration: none;
+    left: 20px;
+    top: 16px;
+}
+.button-right{
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    white-space: nowrap;
+    background: #00ADB5;
+    color: #fff;
+    border-color: rgba(0,0,0,0);
+    border-radius: 980px;
+    font-size: 12px;
+    line-height: 1.33337;
+    font-weight: 400;
+    letter-spacing: -.01em;
+    font-family: "SF Pro Text","SF Pro Icons","Helvetica Neue","Helvetica","Arial",sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    min-width: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    --sk-button-margin-horizontal: 10px;
+    --sk-button-margin-vertical: 10px;
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    text-decoration: none;
+}
+.title p {
+    color: #86868b;
+    font-size: 18px;
+    line-height: 1.1428571429;
+    font-weight: 600;
+    letter-spacing: .007em;
+    font-style: normal;
+    margin: 0;
+}
+.container{
+    background-color: #fbfbfd;
+    height: 60vh;
+}
+.figure {
+    width: 32%;
+    height: 100vh;
+    /* margin-bottom: 20px; */
+    padding: 12px;
+    position: relative;
+    box-sizing: border-box;
+    /* border-color: #0071e3; */
+    /* border-style: dashed; */
+    overflow: hidden;
+    border-radius: 5px;
+}
+.grey {
+    background-color: #fbfbfd;
+}
+
+.black {
+    background-color: #161617;
+    color: rgb(245, 245, 247);
+}
+.river {
+    width: 100%;
+    height: 30vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: #FBFBFB;
+  }
+
+#river_fig{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.river img{
+    height: 20px;
+}
+
+.figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+#main-title {
+    font-size: 3rem;
+    font-weight: 200;
+    line-height: 1.5;
+}
+
+label {
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+}
+
+.btn-outline-primary.disabled, .btn-outline-primary:disabled {
+    color: #50a1ff;
+    background-color: transparent;
+}
+
+.btn {
+    font-size: 11px;
+    padding: 8px 26px 6px;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    outline: none;
+    -webkit-transition: 0.15s linear;
+    transition: 0.15s linear;
+}
+
+text {
+    font-size: 16px;
+}
+
+text.valueLabel {
+    font-weight: 300;
+    fill: #505050;
+    dominant-baseline: middle;
+}
+
+text.timeText {
+    font-size: 20px;
+    font-weight: 700;
+    fill: #505050;
+}
+
+.xAxis > .tick line {
+    shape-rendering: CrispEdges;
+    stroke: #cecece;
+}
+
+.xAxis > .tick line.origin {
+    stroke: #aaaaaa;
+}
+
+.tick text {
+    fill: #6f6f6f;
+}
+
+.progressBar {
+    fill: #505050;
+}
+
+.tAxis > .tick line {
+    shape-rendering: CrispEdges;
+    stroke: #aaaaaa;
+}
+
+.xAxis > path.domain {
+    display: none;
+}
+
+.tAxis > path.domain {
+    color: #aaaaaa;
+}
+
+text.label {
+    font-weight: 600;
+    fill: #202020;
+    dominant-baseline: middle;
+
+}
+
+.xAxis .tick:nth-child(2) text {
+    text-anchor: start;
+}
+
+
+
+.section {
+    background: #2b5055;
+    position: relative;
+    border-bottom: none;
+    background-position: center center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(2.53125rem + 2px);
+    padding: .375rem .75rem;
+    font-size: .9375rem;
+    line-height: 1.9;
+    color: #999;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #eaeff4;
+    border-radius: 2px;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
