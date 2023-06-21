@@ -38,7 +38,7 @@ python app.py
 http://localhost:8050/
 ```
 ### Method 2: Run the program in Docker (Support Windows, Linux, Mac OS)
-{:style="counter-reset:step-counter 0"}
+
 1. Download the latest release by
 ```bash
 git clone https://github.com/RTVis/RTVis.git
