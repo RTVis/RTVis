@@ -1,4 +1,6 @@
 # RTVis: Research Trend Visualization Toolkit
+
+![RTVis](assets/img/favicon_RTVis.png)
 <!-- centering -->
 <p align="center">
 <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
