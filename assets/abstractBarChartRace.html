@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body style="background-color: #fbfbfd;">
+<body style="background-color: #D3D3D3;">
 <main class="main-content" id="app">
   <section class="section">
     <div class="container">
@@ -13,7 +13,7 @@
             <button type="button" class="btn btn-xs btn-outline-primary" v-on:click="checkForm" style="margin-top: 2vh;">Start/Restart</button>
             <button type="button" class="btn btn-xs btn-outline-primary" v-on:click="stopRace" style="margin-top: 2vh;">Stop</button>
           </div>
-          <div id="chartDiv" style="width:100%; height: 60vh;"></div>
+          <div id="chartDiv" style="width:100%; height: 65vh;"></div>
           <p style="position:absolute;top:50%;left:50%;font-size:1.125rem;transform: translate(-50%,-50%)" v-if="interval == null"></p>
     </div>
   </section>
@@ -166,8 +166,8 @@
     
         const margin = {
             top: 20,
-            right: 80,
-            bottom: 0,
+            right: 45,
+            bottom: 20,
             left: 20
         };
     
@@ -305,8 +305,8 @@
     
         let timeText = svg.append('text')
             .attr('class', 'timeText')
-            .attr('x', width - 10)
-            .attr('y', height - margin.bottom - 5)
+            .attr('x', width - 15)
+            .attr('y', height - margin.bottom + 15 )
             .style('text-anchor', 'end')
             .html(d3.timeFormat("%B %d, %Y")(time));
     

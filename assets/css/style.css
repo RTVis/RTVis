@@ -6,9 +6,10 @@ body {
     color: #1d1d1f;
     background-color: #fff;
     font-style: normal;
+    align-items: flex-start;
 }
 h4 {
-    font-size: 20px;
+    font-size: 23px;
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.015em;
@@ -94,7 +95,7 @@ h4 input{
     align-items: center !important;
 }
 .Select-menu-outer{
-    background-color: #000;
+    background-color: white;
 }
 .Select-menu-outer div:hover {
     background-color: rgba(255, 255, 255, 0.01);
@@ -115,27 +116,30 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
   }
 
 .graph-container {
-    margin-top: -10px;
+    margin-top: -0.7%;
     width: 100%;
     /* height is 75% of the viewport height */
-    height: 70vh;
-    padding: 0 5px;
+    height: 60%;
+    padding: 0 0px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     position: absolute;
     overflow: clip;
+    gap: 1%;
 }
+
 .title{
     margin-top: 5px;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 600;
     line-height: 1.05;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.0005em;
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
@@ -216,37 +220,49 @@ html, body {
 }
 .figure {
     width: 32%;
-    height: 100vh;
-    /* margin-bottom: 20px; */
+    height: 100%;
+    margin-bottom: 70px;
     padding: 12px;
     position: relative;
     box-sizing: border-box;
     /* border-color: #0071e3; */
     /* border-style: dashed; */
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: 8px;
 }
 .grey {
-    background-color: #fbfbfd;
+    background-color: #D3D3D3;
+}
+
+.grey-container {
+    background-color: white;
 }
 
 .black {
-    background-color: #161617;
-    color: rgb(245, 245, 247);
+    background-color: #D3D3D3;
+    color: black;
 }
-.river {
-    width: 100%;
-    height: 30vh;
+.river-container {
+    width: 98%;
+    height: 27%;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    padding: 0 5px;
+    bottom: 1.5%;
+    left: 1%;
+    padding: 0 0px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    background-color: #FBFBFB;
+    background-color: #D3D3D3;
+    border-radius: 8px;
   }
+
+.river-chart{
+    width: 97%;
+    height: 97%;
+    padding: 5 5px;
+    border-radius: 8px;
+}
 
 #river_fig{
     width: 100%;
@@ -349,7 +365,11 @@ text.label {
     text-anchor: start;
 }
 
-
+.svg{
+    width: 100%;
+    height: 100%;
+    /* display: block; */
+}
 
 .section {
     background: #2b5055;
