@@ -17,6 +17,8 @@
 
 ## Introduction
 
+When researchers and practitioners are about to start a new project or have just entered a new research field, choosing a proper research topic is always challenging. To help them have an overall understand- ing of the research trend in real-time and find out the research topic they are interested in, we develop the Research Trend Visualization toolkit (RTVis) to analyze and visualize the research paper infor- mation. RTVis consists of a co-occurrence network, a specialized citation bar chart, a word frequency race diagram, and a field theme river, showing the cooperating relationship among authors, paper citation numbers in different venues, the most common words in the abstract part, and field change through time respectively. Moreover, RTVis is open source and easy to deploy. The demo of our toolkit and code with detailed documentation are both available online.
+
 ## Installation
 
 ### Method 1: Directly run the program (Support Windows, Linux, Mac OS)
