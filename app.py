@@ -3,9 +3,11 @@ import plotly.graph_objects as go
 import plotly.express as px
 import networkx as nx
 import pandas as pd
+import numpy as np
 import dash
 import webbrowser
 from flask import Flask
+from collections import Counter
 
 
 # Read the Excel file into a DataFrame
@@ -73,10 +75,13 @@ for field in field_all_traces:
                                          line_shape='spline')
 
 river_fig = go.Figure()
-river_fig.update_layout(plot_bgcolor='#FBFBFB',
-                        paper_bgcolor='#FBFBFB', margin=dict(l=5, r=5, t=0, b=10))
-# river_fig.update_xaxes(gridcolor='#F86F03')
-river_fig.update_yaxes(gridcolor='#888')
+river_fig.update_layout(plot_bgcolor='#D3D3D3',
+                        paper_bgcolor='#D3D3D3',
+                        margin=dict(l=5, r=5, t=0, b=10),
+                        yaxis=dict(title='Paper Counts'),
+                    )
+river_fig.update_xaxes(gridcolor='rgba(8,48,107,0.5)', zeroline=False)
+river_fig.update_yaxes(gridcolor='rgb(8,48,107)', zeroline=False)
 for field in field_trace_dict.keys():
     river_fig.add_trace(field_trace_dict[field])
 
@@ -93,77 +98,41 @@ def extract_authors(entry):
     authors = [author.strip() for author in authors]
     return authors
 
-
+node_df = pd.read_csv('demo_dataset.csv').fillna('')
 def generate_node_fig(x_range, top_n):
-    if x_range is None:
-        df = pd.read_csv('demo_dataset.csv').fillna('')
-    else:
-        df = pd.read_csv('demo_dataset.csv').fillna('')
+    df = node_df.copy()
+    if x_range is not None:
         df = df[(df['Date'] >= x_range[0]) & (df['Date'] <= x_range[1])]
     # Extract the author names from the DataFrame
     author_list = df['Author Name'].tolist()
     # Create an empty graph
     G = nx.Graph()
-
-    # Iterate over each entry in the author_list
+    co_occurrences = Counter()
+    edges = Counter()
     for idx in range(len(author_list)):
         entry = str(author_list[idx])
         authors = extract_authors(entry)
-
-        # Add edges between all pairs of authors in the entry
         for i in range(len(authors)):
             for j in range(i + 1, len(authors)):
                 author1 = authors[i]
                 author2 = authors[j]
-
-                # Increment the weight of the edge if it already exists
-                if G.has_edge(author1, author2):
-                    G[author1][author2]['weight'] += 1
+                if author1 < author2:
+                    edges[(author1, author2)] += 1
                 else:
-                    G.add_edge(author1, author2, weight=1)
-
-    # Calculate the co-occurrence counts for each author
-    co_occurrences = {author: sum(
-        weight['weight'] for weight in G[author].values()) for author in G.nodes()}
-
+                    edges[(author2, author1)] += 1
+                co_occurrences[author1] += 1
+                co_occurrences[author2] += 1
+    G.add_edges_from((a, b, {"weight": w}) for (a, b), w in edges.items())
     # find the authors with the top 100 highest co-occurrence count
-    least_co_occurrences = sorted(
-        co_occurrences.items(), key=lambda x: x[1], reverse=True)[top_n][1]
-    top_authors_nodes = []
-    for node in G.nodes():
-        if co_occurrences[node] > least_co_occurrences:
-            top_authors_nodes.append(node)
+    least_co_occurrences = sorted(co_occurrences.values(), reverse=True)[top_n]
+    G = nx.Graph((a, b, {"weight": w}) for (a, b), w in edges.items() if co_occurrences[a] > least_co_occurrences and co_occurrences[b] > least_co_occurrences)
 
-    # turn the top_authors into a new graph
-    G_top = nx.Graph()
-    for entry in author_list:
-        authors = extract_authors(entry)
-        # Add edges between all pairs of authors in the entry
-        for i in range(len(authors)):
-            for j in range(i + 1, len(authors)):
-                author1 = authors[i]
-                author2 = authors[j]
-                if author1 in top_authors_nodes and author2 in top_authors_nodes:
-                    # Increment the weight of the edge if it already exists
-                    if G_top.has_edge(author1, author2):
-                        G_top[author1][author2]['weight'] += 1
-                    else:
-                        G_top.add_edge(author1, author2, weight=1)
-    # remove the node if it is a single node in the current graph
-    G = G_top.copy()
-    for node in G_top.nodes():
-        if len(list(G_top.neighbors(node))) <= 1:
-            G.remove_node(node)
+    # for node in G_top.nodes():
+    #     if len(list(G_top.neighbors(node))) <= 1:
+    #         G.remove_node(node)
 
     # Generate the layout of the graph
-    pos = nx.kamada_kawai_layout(G, scale=5)
-    # pos = nx.force_atlas2_layout(G, iterations=1000)
-    # pos = forceatlas2.forceatlas2_networkx_layout(G, pos=None, niter=1000)
-    pos = nx.spring_layout(G, pos=pos)
-    # pos = nx.spring_layout(G_top)
-    # pos = nx.fruchterman_reingold_layout(G_top)
-    # pos = nx.spectral_layout(G_top)
-    # pos = nx.circular_layout(G_top)
+    pos = nx.kamada_kawai_layout(G, scale=3)
 
     # Extract node positions and edge coordinates
     node_x = []
@@ -186,7 +155,7 @@ def generate_node_fig(x_range, top_n):
     # Create edge trace
     edge_trace = go.Scatter(
         x=edge_x, y=edge_y,
-        line=dict(width=0.3, color='#888'),
+        line=dict(width=0.3, color='#000'),
         hoverinfo='none',
         mode='lines')
 
@@ -201,7 +170,8 @@ def generate_node_fig(x_range, top_n):
             opacity=0.9,
             size=node_size,  # Update the marker size based on co-occurrences
             sizemode='area',
-        ))
+        )
+        )
 
     # Create a list of node labels
     node_labels = list(G.nodes())
@@ -220,8 +190,8 @@ def generate_node_fig(x_range, top_n):
         showlegend=False,
         hovermode='closest',
         margin=dict(b=0, l=0, r=5, t=5),
-        plot_bgcolor='#fbfbfd',
-        paper_bgcolor='#fbfbfd',
+        plot_bgcolor='#D3D3D3',
+        paper_bgcolor='#D3D3D3',
         xaxis=dict(showgrid=False, zeroline=False,
                    showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False,
@@ -239,14 +209,37 @@ def extract_ymd(time_str):
 
 
 def generate_race_fig(x_range, top_n_words):
-    # read string from "/public/assets/data/barChartRace.csv" and keep it as csv format
-    csv_string = open('assets/data/barChartRace.csv', 'r').read()
-    csv_string = csv_string.replace('\n', '\\n')
     if x_range is None:
         value1 = min_date_ymd
         value2 = max_date_ymd
     else:
         value1, value2 = [extract_ymd(x) for x in x_range]
+    # prepare the data for bar chart race
+    df3 = pd.read_csv('./assets/data/wordCount.csv')
+    # read df3 with lines start from value1 to value2
+    df_temp = df3[(df3['Date'] >= value1) & (df3['Date'] <= value2)]
+    df_temp = df_temp.reset_index(drop=True)
+    # make count vector, instead of string
+    df_temp['Count'] = df_temp['Count'].str.strip('][').str.split(', ').apply(lambda x: list(map(int, x)))
+    df_temp['Word'] = df_temp['Word'].str.strip("[']").str.split('\', \'')
+
+    # Subtract the first row value from each subsequent row in 'Count'
+    first_row = df_temp['Count'].iloc[0]
+    first_row = [i - 1 for i in first_row]
+    df_temp['Count'] = df_temp['Count'].apply(lambda x: np.subtract(x, first_row))
+
+    # Keep only the top 15 words with the highest counts for each date
+    df_temp['Top15'] = df_temp.apply(lambda row: sorted(zip(row['Word'], row['Count']), key=lambda x: x[1], reverse=True)[:15], axis=1)
+    df_temp = df_temp.explode('Top15').reset_index(drop=True)
+
+    # Separate 'Word' and 'Count' into separate columns
+    df_temp[['Word', 'Count']] = pd.DataFrame(df_temp['Top15'].tolist(), index=df_temp.index)
+    df_temp = df_temp.drop(columns=['Top15'])
+    
+    # convert df5 to csv string
+    csv_string = df_temp.to_csv(index=False)
+    csv_string = csv_string.replace('\n', '\\n')
+    
     with open('assets/abstractBarChartRace.html', 'r') as file:
         src_doc = file.read()\
                     .replace('%value1%', value1)\
@@ -258,12 +251,16 @@ def generate_race_fig(x_range, top_n_words):
 src_doc = generate_race_fig(None, top_n_words=8)
 ##############################################################################################################
 
-
-def generate_bar_chart(top_n, click_data):
-    df = pd.read_csv('demo_dataset.csv')
+def generate_bar_chart(top_n, click_data, x_range):
+    if x_range is None:
+        df = pd.read_csv('demo_dataset.csv')
+    else:
+        df = pd.read_csv('demo_dataset.csv')
+        df = df[(df['Date'] >= x_range[0]) & (df['Date'] <= x_range[1])]
     df['Year'] = df['Date'].str[0:4].astype('int')
     gb = df.groupby(['Venue', 'Year']).sum(numeric_only=True)
-    gb = gb.groupby(level=0).filter(lambda x: len(x) > 2)
+    least_year = max(df['Year'].max() - df['Year'].min() - 1, 0)
+    gb = gb.groupby(level=0).filter(lambda x: len(x) > least_year)
     first_n = gb.reset_index().groupby('Venue').sum(numeric_only=True).sort_values(
         'Paper Citation Count', ascending=False).reset_index()['Venue'][0:top_n].tolist()
     df_clean = df[df['Venue'].isin(first_n)].sort_values(
@@ -271,34 +268,29 @@ def generate_bar_chart(top_n, click_data):
     bar_fig = px.bar(df_clean, x="Year", y="Paper Citation Count",
                      color="Venue", barmode="group", hover_name="Title")
     bar_fig.update_layout(
-        plot_bgcolor='#161617',
-        paper_bgcolor='#161617',
+        plot_bgcolor='#D3D3D3',
+        paper_bgcolor='#D3D3D3',
         hoverlabel=dict(
-            bgcolor="white",
+            bgcolor="rgb(245, 245, 247)",
             font_size=8,
             font_family='"SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif'
         ),
-        xaxis=dict(
-            linecolor='rgb(245, 245, 247)',
-            tickfont=dict(color='rgb(245, 245, 247)'),
-        ),
-        yaxis=dict(
-            linecolor='rgb(245, 245, 247)',
-            tickfont=dict(color='rgb(245, 245, 247)'),
-        ),
-        font=dict(
-            color='rgb(245, 245, 247)',
-            family='"SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif'
-        ),
         legend=dict(
             x=-0.1,
-            y=-1.2
+            y=-1.0
         ),
         margin=dict(
             l=5,
             r=5,
             b=0,
         ))
+    bar_fig.update_traces(
+        marker_line_color='rgb(8,48,107)',
+        marker_line_width=0.15)
+    bar_fig.update_xaxes(showgrid=False, gridwidth=1, gridcolor='rgb(8,48,107)')
+    bar_fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgb(8,48,107)')
+    bar_fig.update_xaxes(showline=True, linewidth=1, linecolor='rgb(8,48,107)',zeroline=False)
+    bar_fig.update_yaxes(showline=True, linewidth=1, linecolor='rgb(8,48,107)',zeroline=False)
     if click_data is not None:
         title = click_data['points'][0]['hovertext']
         title = title.replace(" ", "%20")
@@ -306,9 +298,7 @@ def generate_bar_chart(top_n, click_data):
         click_data = None
         return bar_fig, click_data
     return bar_fig, click_data
-
-
-bar_fig, _ = generate_bar_chart(5, click_data=None)
+bar_fig, _ = generate_bar_chart(5, click_data=None, x_range=None)
 ##############################################################################################################
 # show the figures using dash
 external_stylesheets = ['assets/css/style.css']
@@ -323,7 +313,7 @@ app.layout = html.Div(
             children=[
                 html.A(
                     className='button-left',
-                    href='https://github.com/linyueqian/RTVis',
+                    href='https://github.com/RTVis/RTVis',
                     children='Code'
                 ),
                 html.A(
@@ -335,7 +325,7 @@ app.layout = html.Div(
                 html.P('Visualize research trends in a specific field')
             ]),
         html.Div(
-            className='graph-container grey',
+            className='graph-container grey-container',
             # style={'width': '100%', 'height': '100%'},
             children=[
                 html.Div(
@@ -405,9 +395,12 @@ app.layout = html.Div(
                     ]
                 )]),
         html.Div(
-            className='river',
+            className='river-container',
             children=[
-                dcc.Graph(id='river_fig', figure=river_fig)
+                html.Div(
+                    className='river-chart',
+                    children=[dcc.Graph(id='river_fig', figure=river_fig)]
+                )
             ]
         )
     ]
@@ -425,33 +418,40 @@ app.layout = html.Div(
     Input('bar_fig', 'clickData'),
     Input("node-x-input", "value"),
     Input("race-x-input", "value"),
-    [State('bar_fig', 'figure')]
-    )
+    [State('bar_fig', 'figure')],
+    prevent_initial_call=True
+)
+def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, bar_fig):
 
-def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, state=None):
-    if relayoutData is None:
-        node_fig = generate_node_fig(None, top_n_node)
-        return node_fig, river_fig, src_doc, generate_bar_chart(None, click_data)
-    else:
+    x_range = None
+    if relayoutData is not None:
         if 'xaxis.range[0]' in relayoutData:
-            x_range = [relayoutData['xaxis.range[0]'],
-                       relayoutData['xaxis.range[1]']]
-            river_fig.update_layout(xaxis_range=x_range)
-            node_fig = generate_node_fig(x_range, top_n_node)
-            race_fig = generate_race_fig(x_range, top_n_words)
-            bar_fig, click_data = generate_bar_chart(top_n_bar, click_data)
-            return node_fig, river_fig, race_fig, bar_fig, click_data
+            x_range = [relayoutData['xaxis.range[0]'], relayoutData['xaxis.range[1]']]
         elif 'xaxis.autorange' in relayoutData:
-            river_fig.update_layout(xaxis_range=None, yaxis_range=None)
-            node_fig = generate_node_fig(None, top_n_node)
-            race_fig = generate_race_fig(None, top_n_words)
-            bar_fig, click_data = generate_bar_chart(top_n_bar, click_data)
-            return node_fig, river_fig, race_fig, bar_fig, click_data
-        else:
-            node_fig = generate_node_fig(None, top_n_node)
-            race_fig = generate_race_fig(None, top_n_words)
-            bar_fig, click_data = generate_bar_chart(top_n_bar, click_data)
-            return node_fig, river_fig, race_fig, bar_fig, click_data
+            x_range = None
+
+    node_fig = update_node_fig(x_range, top_n_node)
+    river_fig = update_river_fig(x_range, relayoutData)
+    race_fig = update_race_fig(x_range, top_n_words)
+    bar_fig, click_data = update_bar_chart(top_n_bar, click_data, x_range)
+
+    return node_fig, river_fig, race_fig, bar_fig, click_data
+
+def update_node_fig(x_range, top_n_node):
+    return generate_node_fig(x_range, top_n_node)
+
+def update_river_fig(x_range, relayoutData):
+    if x_range is not None:
+        river_fig.update_layout(xaxis_range=x_range)
+    elif 'xaxis.autorange' in relayoutData:
+        river_fig.update_layout(xaxis_range=None, yaxis_range=None)
+    return river_fig
+
+def update_race_fig(x_range, top_n_words):
+    return generate_race_fig(x_range, top_n_words)
+
+def update_bar_chart(top_n_bar, click_data, x_range):
+    return generate_bar_chart(top_n_bar, click_data, x_range)
 
 
 # Run the Dash application
