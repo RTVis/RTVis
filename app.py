@@ -177,8 +177,7 @@ def generate_node_fig(x_range, top_n):
     node_labels = list(G.nodes())
 
     # Create node text
-    node_text = [
-        f"{node}<br>Co-occurrences: {co_occurrences[node]}" for node in G.nodes()]
+    node_text = ["{}<br>Co-occurrences: {}".format(node, co_occurrences[node]) for node in G.nodes()]
 
     # Update node trace with labels and text
     node_trace.text = node_labels

@@ -11,10 +11,10 @@ services:
       - .:/rtvis
     command: python -u app.py
 # if you want to use a static IP address inside the docker (possibly useful for connecting to a database or reverse proxy), ), uncomment the following lines
-    # networks:
-    #   rtvis_net:
-    #     ipv4_address: 173.26.0.2
+    networks:
+      rtvis_net:
+        ipv4_address: 173.26.0.2
 
-# networks:
-#   rtvis_net:
-#     external: true
+networks:
+  rtvis_net:
+    external: true
