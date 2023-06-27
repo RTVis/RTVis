@@ -1,4 +1,5 @@
 from dash import Dash, html, dash_table, dcc, callback, Output, Input, State
+import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import plotly.express as px
 import networkx as nx
@@ -290,14 +291,18 @@ def generate_bar_chart(top_n, click_data, x_range):
     bar_fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgb(8,48,107)')
     bar_fig.update_xaxes(showline=True, linewidth=1, linecolor='rgb(8,48,107)',zeroline=False)
     bar_fig.update_yaxes(showline=True, linewidth=1, linecolor='rgb(8,48,107)',zeroline=False)
+    # url = "https://scholar.google.com"
+    url = None
     if click_data is not None:
         title = click_data['points'][0]['hovertext']
         title = title.replace(" ", "%20")
+        url = "https://scholar.google.com/scholar?q="+title+"&btnG=&hl=en&as_sdt=0%2C5"
         webbrowser.open_new_tab("https://scholar.google.com/scholar?q="+title+"&btnG=&hl=en&as_sdt=0%2C5")
         click_data = None
-        return bar_fig, click_data
-    return bar_fig, click_data
-bar_fig, _ = generate_bar_chart(5, click_data=None, x_range=None)
+        return bar_fig, click_data, url
+    return bar_fig, click_data, url
+bar_fig, _, url = generate_bar_chart(5, click_data=None, x_range=None)
+
 ##############################################################################################################
 # show the figures using dash
 external_stylesheets = ['assets/css/style.css']
@@ -313,12 +318,14 @@ app.layout = html.Div(
                 html.A(
                     className='button-left',
                     href='https://github.com/RTVis/RTVis',
-                    children='Code'
+                    children='Code',
+                    target="_blank"
                 ),
                 html.A(
                     className='button-right',
                     href='https://docs.rtvis.design',
-                    children='Docs'
+                    children='Docs',
+                    target="_blank"
                 ),
                 html.H1('Research Trend Visualization'),
                 html.P('Visualize research trends in a specific field')
@@ -367,6 +374,31 @@ app.layout = html.Div(
                             ])
                         ]),
                         dcc.Graph(id="bar_fig", figure=bar_fig),
+                        html.A(
+                            className='button-right',
+                            id="google_scholar",
+                            href=url,
+                            children='Google Scholar',
+                            target="_blank"
+                        ),
+                        # html.Div(
+                        #     [
+                        #         dbc.Button("Open modal", id="open", n_clicks=0),
+                        #         dbc.Modal(
+                        #             [
+                        #                 dbc.ModalHeader(dbc.ModalTitle("Header")),
+                        #                 dbc.ModalBody("This is the content of the modal"),
+                        #                 dbc.ModalFooter(
+                        #                     dbc.Button(
+                        #                         "Close", id="close", className="ms-auto", n_clicks=0
+                        #                     )
+                        #                 ),
+                        #             ],
+                        #             id="modal",
+                        #             is_open=False,
+                        #         ),
+                        #     ]
+                        # )
                     ]
                 ),
                 html.Div(
@@ -405,6 +437,23 @@ app.layout = html.Div(
     ]
 )
 
+# Google tag (gtag.js)
+app.scripts.append_script(
+    {
+        "external_url": "https://www.googletagmanager.com/gtag/js?id=G-421T0CBJDV"
+    }
+)
+
+app.scripts.append_script(
+    {
+        "external_url": """
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-421T0CBJDV');
+        """
+    }
+)
 
 @app.callback(
     Output('node_fig', 'figure'),
@@ -412,12 +461,17 @@ app.layout = html.Div(
     Output('race_fig', 'srcDoc'),
     Output("bar_fig", "figure"),
     Output('bar_fig', 'clickData'),
+    Output('google_scholar', 'href'),
+    Output("modal", "is_open"),
     Input('river_fig', 'relayoutData'),
     Input("bar-chart-x-dropdown", "value"),
     Input('bar_fig', 'clickData'),
     Input("node-x-input", "value"),
     Input("race-x-input", "value"),
-    [State('bar_fig', 'figure')],
+    State('bar_fig', 'figure'),
+    State("modal", "is_open"),
+    Input("open", "n_clicks"),
+    Input("close", "n_clicks"),
     prevent_initial_call=True
 )
 def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, bar_fig):
@@ -432,9 +486,16 @@ def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, 
     node_fig = update_node_fig(x_range, top_n_node)
     river_fig = update_river_fig(x_range, relayoutData)
     race_fig = update_race_fig(x_range, top_n_words)
-    bar_fig, click_data = update_bar_chart(top_n_bar, click_data, x_range)
+    bar_fig, click_data, url = update_bar_chart(top_n_bar, click_data, x_range)
+    # is_open = toggle_modal(n1, n2, is_open)
 
-    return node_fig, river_fig, race_fig, bar_fig, click_data
+    return node_fig, river_fig, race_fig, bar_fig, click_data, url
+
+# def toggle_modal(n1, n2, is_open):
+#     if n1 or n2:
+#         return not is_open
+#     return is_open
+
 
 def update_node_fig(x_range, top_n_node):
     return generate_node_fig(x_range, top_n_node)
