@@ -9,7 +9,7 @@ services:
       - 8050:8050
     volumes:
       - .:/rtvis
-    command: python -u app.py
+    command: sh -c "pip install --no-cache-dir -r requirements.txt && gunicorn --workers=1 --threads=1 -b 0.0.0.0:8050 app:server"
 # if you want to use a static IP address inside the docker (possibly useful for connecting to a database or reverse proxy), ), uncomment the following lines
     networks:
       rtvis_net:

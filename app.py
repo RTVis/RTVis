@@ -307,7 +307,9 @@ bar_fig, _, url = generate_bar_chart(5, click_data=None, x_range=None)
 # show the figures using dash
 external_stylesheets = ['assets/css/style.css']
 server = Flask(__name__)
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, external_scripts=[
+    'https://www.googletagmanager.com/gtag/js?id=G-421T0CBJDV'
+], server=server)
 app.title = 'Research Trend Visualization'
 app.favicon = 'assets/favicon.ico'
 app.layout = html.Div(
@@ -437,13 +439,9 @@ app.layout = html.Div(
     ]
 )
 
-# Google tag (gtag.js)
-app.scripts.append_script(
-    {
-        "external_url": "https://www.googletagmanager.com/gtag/js?id=G-421T0CBJDV"
-    }
-)
+app.scripts.config.serve_locally = False
 
+# Google tag (gtag.js)
 app.scripts.append_script(
     {
         "external_url": """

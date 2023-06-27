@@ -10,6 +10,8 @@ WORKDIR /rtvis
 # Copy the current directory contents into the container at /app
 COPY . /rtvis
 
+RUN echo "networks:\n  rtvis_net:\n    ipv4_address: 173.26.0.2\n\nnetworks:\n  rtvis_net:\n    external: true" >> docker-compose.yml
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 # RUN python dataprocessing.py
