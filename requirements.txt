@@ -4,3 +4,4 @@ networkx==2.8.4
 plotly==5.13.0
 scipy==1.10.0
 gunicorn
+dash_bootstrap_components
