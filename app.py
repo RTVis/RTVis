@@ -460,16 +460,12 @@ app.scripts.append_script(
     Output("bar_fig", "figure"),
     Output('bar_fig', 'clickData'),
     Output('google_scholar', 'href'),
-    Output("modal", "is_open"),
     Input('river_fig', 'relayoutData'),
     Input("bar-chart-x-dropdown", "value"),
     Input('bar_fig', 'clickData'),
     Input("node-x-input", "value"),
     Input("race-x-input", "value"),
     State('bar_fig', 'figure'),
-    State("modal", "is_open"),
-    Input("open", "n_clicks"),
-    Input("close", "n_clicks"),
     prevent_initial_call=True
 )
 def update_figure(relayoutData, top_n_bar, click_data, top_n_node, top_n_words, bar_fig):
