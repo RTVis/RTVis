@@ -77,6 +77,4 @@ docker-compose up -d
 
 ## Star History
 
-## Star History
-
 [![Star History Chart](https://api.star-history.com/svg?repos=rtvis/rtvis&type=Date)](https://star-history.com/#rtvis/rtvis&Date)
