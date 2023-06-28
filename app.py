@@ -307,11 +307,36 @@ bar_fig, _, url = generate_bar_chart(5, click_data=None, x_range=None)
 # show the figures using dash
 external_stylesheets = ['assets/css/style.css']
 server = Flask(__name__)
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, external_scripts=[
-    'https://www.googletagmanager.com/gtag/js?id=G-421T0CBJDV'
-], server=server)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server, update_title='Loading, please wait...', suppress_callback_exceptions=True)
 app.title = 'Research Trend Visualization'
 app.favicon = 'assets/favicon.ico'
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-421T0CBJDV"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'G-421T0CBJDV');
+        </script>
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+'''
 app.layout = html.Div(
     children=[
         html.Div(
@@ -440,18 +465,6 @@ app.layout = html.Div(
 )
 
 app.scripts.config.serve_locally = False
-
-# Google tag (gtag.js)
-app.scripts.append_script(
-    {
-        "external_url": """
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-421T0CBJDV');
-        """
-    }
-)
 
 @app.callback(
     Output('node_fig', 'figure'),
