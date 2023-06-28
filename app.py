@@ -460,7 +460,6 @@ app.scripts.append_script(
     Output("bar_fig", "figure"),
     Output('bar_fig', 'clickData'),
     Output('google_scholar', 'href'),
-    Output("modal", "is_open"),
     Input('river_fig', 'relayoutData'),
     Input("bar-chart-x-dropdown", "value"),
     Input('bar_fig', 'clickData'),
