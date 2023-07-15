@@ -305,7 +305,7 @@ bar_fig, _, url = generate_bar_chart(5, click_data=None, x_range=None)
 
 ##############################################################################################################
 # show the figures using dash
-external_stylesheets = ['assets/css/style.css']
+external_stylesheets = ['assets/css/style.css', 'https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css']
 server = Flask(__name__)
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets, server=server, update_title='Loading, please wait...', suppress_callback_exceptions=True)
 app.title = 'Research Trend Visualization'
@@ -359,7 +359,6 @@ app.layout = html.Div(
             ]),
         html.Div(
             className='graph-container grey-container',
-            # style={'width': '100%', 'height': '100%'},
             children=[
                 html.Div(
                     className='figure grey',
@@ -402,30 +401,14 @@ app.layout = html.Div(
                         ]),
                         dcc.Graph(id="bar_fig", figure=bar_fig),
                         html.A(
-                            className='button-right',
+                            className='button-right scholar',
                             id="google_scholar",
                             href=url,
-                            children='Google Scholar',
+                            children=[
+                                html.I(className="ai ai-google-scholar ai-2x", style={'align': 'center', 'padding': '0'}),
+                            ],
                             target="_blank"
                         ),
-                        # html.Div(
-                        #     [
-                        #         dbc.Button("Open modal", id="open", n_clicks=0),
-                        #         dbc.Modal(
-                        #             [
-                        #                 dbc.ModalHeader(dbc.ModalTitle("Header")),
-                        #                 dbc.ModalBody("This is the content of the modal"),
-                        #                 dbc.ModalFooter(
-                        #                     dbc.Button(
-                        #                         "Close", id="close", className="ms-auto", n_clicks=0
-                        #                     )
-                        #                 ),
-                        #             ],
-                        #             id="modal",
-                        #             is_open=False,
-                        #         ),
-                        #     ]
-                        # )
                     ]
                 ),
                 html.Div(

@@ -205,6 +205,9 @@ html, body {
     top: 16px;
     text-decoration: none;
 }
+.scholar{
+    top: 13px;
+}
 .title p {
     color: #86868b;
     font-size: 18px;
@@ -258,7 +261,7 @@ html, body {
   }
 
 .river-chart{
-    width: 97%;
+    width: 99%;
     height: 97%;
     padding: 5 5px;
     border-radius: 8px;
